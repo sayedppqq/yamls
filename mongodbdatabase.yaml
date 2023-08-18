@@ -1,0 +1,26 @@
+apiVersion: schema.kubedb.com/v1alpha1
+kind: MongoDBDatabase
+metadata:
+  name: mongodb-schema
+  namespace: demo
+  labels:
+    "schema.kubedb.com": "mongo"
+spec:
+  database:
+    serverRef:
+      name: quick-mongodb
+      namespace: demo
+    config:
+      name: emptydb
+  vaultRef:
+    name: vault
+    namespace: demo
+  accessPolicy:
+    subjects:
+      - name: "app-service-account"
+        namespace: demo
+        kind: "ServiceAccount"
+        apiGroup: ""
+    defaultTTL: "8h"
+    maxTTL: "200h"
+  deletionPolicy: Delete

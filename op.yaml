@@ -1,0 +1,12 @@
+apiVersion: ops.kubedb.com/v1alpha1
+kind: MongoDBOpsRequest
+metadata:
+  name: mor-pqexnv
+  namespace: demo
+spec:
+  apply: IfReady
+  databaseRef:
+    name: mg-replicaset
+  tls:
+    remove: true
+  type: ReconfigureTLS

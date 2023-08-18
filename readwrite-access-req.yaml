@@ -1,0 +1,13 @@
+apiVersion: engine.kubevault.com/v1alpha1
+kind: SecretAccessRequest
+metadata:
+  name: readwrite-access-req
+  namespace: demo
+spec:
+  roleRef:
+    kind: MongoDBRole
+    name: mongodb-readwrite-role
+  subjects: 
+    - kind: ServiceAccount
+      name: readwrite-access-svc-ac
+      namespace: demo

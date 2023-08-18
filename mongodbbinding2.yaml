@@ -1,0 +1,9 @@
+apiVersion: catalog.kubeware.dev/v1alpha1
+kind: MongoDBBinding
+metadata:
+  name: mongo-binding2
+  namespace: default
+spec:
+  sourceRef:
+    namespace: test
+    name: mgo-quickstart

@@ -1,0 +1,14 @@
+apiVersion: engine.kubevault.com/v1alpha1
+kind: SecretEngine
+metadata:
+  name: mongo-hostedapp2-mongo-secret-engine-test
+  namespace: test
+spec:
+  mongodb:
+    databaseRef:
+      name: mgo-quickstart-test
+      namespace: test
+    pluginName: mongodb-database-plugin
+  vaultRef:
+    name: vault
+    namespace: kubeops

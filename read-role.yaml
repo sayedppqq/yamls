@@ -1,0 +1,12 @@
+apiVersion: engine.kubevault.com/v1alpha1
+kind: MongoDBRole
+metadata:
+  name: mongodb-read-role
+  namespace: demo
+spec:
+  secretEngineRef:
+    name: mongodb-secret-engine
+  creationStatements:
+    - "{ \"db\": \"admin\", \"roles\": [{ \"role\": \"read\" }, {\"role\": \"read\", \"db\": \"foo\"}] }"
+  defaultTTL: 1h
+  maxTTL: 24h

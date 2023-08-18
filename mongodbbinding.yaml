@@ -1,0 +1,9 @@
+apiVersion: catalog.kubeware.dev/v1alpha1
+kind: MongoDBBinding
+metadata:
+  name: mongo-binding
+  namespace: test
+spec:
+  sourceRef:
+    namespace: demo
+    name: mgo-replicaset

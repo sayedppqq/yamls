@@ -1,0 +1,16 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Repository
+metadata:
+  name: s3-repo
+  namespace: demo
+spec:
+  usagePolicy:
+    allowedNamespaces:
+      from: Same
+  backend:
+    s3:
+      endpoint: us-east-1.linodeobjects.com
+      bucket: abusayed
+      region: us-east-1
+      prefix: /hhh/sayed/
+    storageSecretName: s3-secret-stash
