@@ -1,0 +1,26 @@
+apiVersion: addons.kubestash.com/v1alpha1
+kind: Function
+metadata:
+  name: mongodb-backup
+spec:
+  image: sayedppqq/mongodb:sayed_mongo_linux_amd64
+  args:
+  - backup
+  - --scratchDir=${scratchDir:=/tmp}
+  - --namespace=${namespace:=default}
+  - --backupSession=${backupSession:=}
+  - --mongoArgs=${mongoArgs:=}
+---
+apiVersion: addons.kubestash.com/v1alpha1
+kind: Function
+metadata:
+  name: mongodb-restore
+spec: 
+  image: sayedppqq/mongodb:sayed_mongo_linux_amd64
+  args:
+  - restore
+  - --scratchDir=${scratchDir:=/tmp}
+  - --namespace=${namespace:=default}
+  - --restoreSession=${restoreSession:=}
+  - --snapshotName=${snapshotName:=}
+  - --mongoArgs=${mongoArgs:=}

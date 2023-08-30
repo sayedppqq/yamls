@@ -1,0 +1,23 @@
+apiVersion: addons.kubestash.com/v1alpha1
+kind: Addon
+metadata:
+  name: mongodb
+spec:
+  backupTasks:
+  - name: mongodb-backup
+    singleton: true
+    function: mongodb-backup
+    driver: Restic
+    parameters:
+    - name: mongoArgs
+      usage: Specifies the database args 
+      required: false
+  restoreTasks:
+  - name: mongodb-restore
+    singleton: true
+    function: mongodb-restore
+    driver: Restic
+    parameters:
+    - name: mongoArgs
+      usage: Specifies the database args 
+      required: false

@@ -1,14 +1,11 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mg-replicaset
+  name: mg-standalone
   namespace: demo
 spec:
-  version: "4.4.6"
-  replicaSet: 
-    name: "replicaset"
-  replicas: 3
-  sslMode: requireSSL
+  version: "6.0.5"
+  sslMode: disabled
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -16,25 +13,5 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
-  hidden:
-    podTemplate:
-      spec:
-        resources:
-          requests:
-            cpu: "400m"
-            memory: "400Mi"
-    replicas: 2
-    storage:
-      storageClassName: "standard"
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Gi
-  tls:
-    issuerRef:
-      apiGroup: cert-manager.io
-      kind: Issuer
-      name: mongo-ca-issuer
+        storage: 200Mi
   terminationPolicy: WipeOut

@@ -1,0 +1,21 @@
+apiVersion: core.kubestash.com/v1alpha1
+kind: RestoreSession
+metadata:
+  name: mongodb-restoresession
+  namespace: demo
+spec:
+  target:
+    name: mg-standalone
+    namespace: demo
+    apiGroup: kubedb.com
+    kind: MongoDB
+  dataSource:
+    snapshot: latest
+    repository: s3-repo
+    encryptionSecret:
+      name: encry-secret 
+      namespace: demo
+  addon:
+    name: mongodb
+    tasks:
+      - name: mongodb-restore

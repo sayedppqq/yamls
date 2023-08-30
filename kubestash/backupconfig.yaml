@@ -1,0 +1,41 @@
+apiVersion: core.kubestash.com/v1alpha1
+kind: BackupConfiguration
+metadata:
+  name: db-backup
+  namespace: demo
+spec:
+  target:
+    apiGroup: kubedb.com
+    kind: MongoDB
+    namespace: demo
+    name: mg-standalone
+  backends:
+    - name: s3-backend
+      storageRef:
+        apiGroup: storage.kubestash.com
+        namespace: demo
+        kind: BackupStorage
+        name: s3-storage
+      retentionPolicy:
+        name: manifest-rp
+        namespace: demo
+  sessions:
+    - name: frequent-backup
+      sessionHistoryLimit: 3
+      scheduler:
+        schedule: "*/2 * * * *"
+        successfulJobsHistoryLimit: 1
+        failedJobsHistoryLimit: 1
+        jobTemplate:
+          backoffLimit: 1
+      repositories:
+        - name: s3-repo
+          backend: s3-backend
+          directory: /mongo
+          encryptionSecret:
+           name: encry-secret # some addon may not support encryption
+           namespace: demo
+      addon:
+        name: mongodb
+        tasks:
+          - name: mongodb-backup
