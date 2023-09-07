@@ -4,11 +4,10 @@ metadata:
   name: mg-replicaset
   namespace: demo
 spec:
-  version: "4.4.6"
+  version: "4.2.3"
   replicaSet: 
     name: "replicaset"
   replicas: 2
-  sslMode: requireSSL
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -17,21 +16,7 @@ spec:
     resources:
       requests:
         storage: 100Mi
-  hidden:
-    podTemplate:
-      spec:
-        resources:
-          requests:
-            cpu: "400m"
-            memory: "400Mi"
-    replicas: 2
-    storage:
-      storageClassName: "standard"
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 100Mi
+  sslMode: requireSSL        
   tls:
     issuerRef:
       apiGroup: cert-manager.io

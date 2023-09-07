@@ -5,6 +5,9 @@ metadata:
   namespace: demo
 spec:
   version: "4.2.24"
+  replicaSet: 
+    name: "replicaset"
+  replicas: 2
   sslMode: disabled
   storageType: Durable
   storage:
@@ -13,5 +16,5 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 200Mi
+        storage: 100Mi
   terminationPolicy: WipeOut

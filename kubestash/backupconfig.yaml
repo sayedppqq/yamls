@@ -8,7 +8,7 @@ spec:
     apiGroup: kubedb.com
     kind: MongoDB
     namespace: demo
-    name: mg-standalone
+    name: mongo
   backends:
     - name: s3-backend
       storageRef:
@@ -23,7 +23,7 @@ spec:
     - name: frequent-backup
       sessionHistoryLimit: 3
       scheduler:
-        schedule: "*/2 * * * *"
+        schedule: "*/1 * * * *"
         successfulJobsHistoryLimit: 1
         failedJobsHistoryLimit: 1
         jobTemplate:
