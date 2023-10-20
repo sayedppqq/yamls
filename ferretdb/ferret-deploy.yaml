@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ferretdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ferretdb
+  template:
+    metadata:
+      labels:
+        app: ferretdb
+    spec:
+      containers:
+        - name: postgresdb
+          image: postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: random
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: ferretdb
+          volumeMounts:
+            - mountPath: /var/lib/postgres/data
+              name: db-data
+              
+        - name: ferretdb
+          image: ghcr.io/ferretdb/ferretdb
+          ports:
+            - containerPort: 27011
+
+          env:
+
+            - name: FERRETDB_POSTGRESQL_URL
+              value: postgres://127.0.0.1:5432/ferretdb
+            
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-persistent-volume-claim

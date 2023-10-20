@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sqlite-persistent-volume
+  labels:
+    type: local
+    app: sqlite
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  # A db can write and read from volumes to multiple pods
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/sqlite"

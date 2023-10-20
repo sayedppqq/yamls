@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ferretdb
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ferretdb
+  template:
+    metadata:
+      labels:
+        app: ferretdb
+    spec:
+      containers:
+        - name: ferretdb
+          image: ghcr.io/ferretdb/ferretdb
+          ports:
+            - containerPort: 27018
+          env:
+            - name: FERRETDB_POSTGRESQL_URL
+              value: "postgres://postgres-service.demo.svc.cluster.local:1/ferretdb"
+
+            - name: FERRETDB_LISTEN_TLS_CERT_FILE
+              value: "/etc/certs/tls.crt"
+
+            - name: FERRETDB_LISTEN_TLS_KEY_FILE
+              value: "/etc/certs/tls.key"
+
+            - name: FERRETDB_LISTEN_TLS_CA_FILE
+              value: "/etc/certs/ca.crt"
+            
+            - name: FERRETDB_LISTEN_TLS
+              value: :27018
+
+          volumeMounts:
+            - mountPath: "/etc/certs"
+              name: server-secret
+              readOnly: true
+
+      volumes:
+        - name: server-secret
+          secret:
+            secretName: mgo-tls-server-cert

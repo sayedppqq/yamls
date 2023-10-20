@@ -8,7 +8,7 @@ spec:
     apiGroup: kubedb.com
     kind: MongoDB
     namespace: demo
-    name: mongo
+    name: mg-shard
   backends:
     - name: s3-backend
       storageRef:

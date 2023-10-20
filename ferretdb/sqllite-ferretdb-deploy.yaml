@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqllite-ferretdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlite
+  template:
+    metadata:
+      labels:
+        app: sqlite
+    spec:
+      containers:
+              
+        - name: ferretdb
+          image: ghcr.io/ferretdb/ferretdb
+          ports:
+            - containerPort: 27017
+          env:
+            - name: FERRETDB_HANDLER
+              value: sqlite
+            - name: FERRETDB_SQLITE_URL
+              value: file:/data/sqliteee/kk/
+          volumeMounts:
+            - mountPath: /data/sqliteee/kk/
+              name: db-data
+            
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-persistent-volume-claim-sqlite

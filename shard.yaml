@@ -1,26 +1,25 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mongo
+  name: mg-shard
   namespace: demo
 spec:
-  version: "4.2.24"
+  version: "5.0.3"
   shardTopology:
     configServer:
-      replicas: 2
+      replicas: 3
       storage:
         resources:
           requests:
-            storage: 200Mi
+            storage: 250Mi
         storageClassName: standard
     mongos:
-      replicas: 2
+      replicas: 1
     shard:
-      replicas: 2
+      replicas: 3
       shards: 2
       storage:
         resources:
           requests:
-            storage: 200Mi
+            storage: 250Mi
         storageClassName: standard
-  sslMode: disabled

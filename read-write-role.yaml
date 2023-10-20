@@ -7,6 +7,6 @@ spec:
   secretEngineRef:
     name: mongodb-secret-engine
   creationStatements:
-    - "{ \"db\": \"admin\", \"roles\": [{ \"role\": \"readWrite\" }, {\"role\": \"readWrite\", \"db\": \"foo\"}] }"
+    - "{ \"db\": \"admin\", \"roles\": [{ \"role\": \"readWrite\" }, {\"role\": \"read\", \"db\": \"foo\"}] }"
   defaultTTL: 8h
   maxTTL: 24h

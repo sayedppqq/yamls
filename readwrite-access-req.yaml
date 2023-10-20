@@ -9,5 +9,5 @@ spec:
     name: mongodb-readwrite-role
   subjects: 
     - kind: ServiceAccount
-      name: readwrite-access-svc-ac
+      name: app-service-account
       namespace: demo

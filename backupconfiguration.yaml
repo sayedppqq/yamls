@@ -4,7 +4,7 @@ metadata:
   name: sample-mongodb-backup
   namespace: demo
 spec:
-  schedule: "*/2 * * * *"
+  schedule: "*/5 * * * *"
   repository:
     name: s3-repo
     namespace: demo
@@ -12,7 +12,7 @@ spec:
     ref:
       apiVersion: appcatalog.appscode.com/v1alpha1
       kind: AppBinding
-      name: mongo-sh
+      name: mg-replicaset
   retentionPolicy:
     name: keep-last-5
     keepLast: 5

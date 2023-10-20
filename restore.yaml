@@ -2,7 +2,7 @@ apiVersion: stash.appscode.com/v1beta1
 kind: RestoreSession
 metadata:
   name: sample-mongodb-restore
-  namespace: shard
+  namespace: demo
 spec:
   repository:
     name: s3-repo
@@ -10,6 +10,6 @@ spec:
     ref:
       apiVersion: appcatalog.appscode.com/v1alpha1
       kind: AppBinding
-      name: mgo-replicaset
+      name: mongo-sh
   rules:
   - snapshots: [latest]

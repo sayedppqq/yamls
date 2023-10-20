@@ -2,8 +2,11 @@ apiVersion: catalog.kubeware.dev/v1alpha1
 kind: MongoDBBinding
 metadata:
   name: mongo-binding
-  namespace: test
+  namespace: kube
+  annotations:
+    gateway.networking.k8s.io/name: kwg
+    gateway.networking.k8s.io/namespace: gateway
 spec:
   sourceRef:
     namespace: demo
-    name: mgo-replicaset
+    name: mongo

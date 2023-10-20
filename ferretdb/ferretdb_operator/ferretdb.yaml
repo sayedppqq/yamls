@@ -1,0 +1,23 @@
+apiVersion: kubedb.dev.my.domain/v1alpha2
+kind: FerretDB
+metadata:
+  name: ferretdb-sample
+  namespace: demo
+spec:
+  version: "1.12.1"
+  authSecret:
+    externallyManaged: false
+  sslMode: requireSSL
+  tls:
+    issuerRef:
+      apiGroup: "cert-manager.io"
+      kind: Issuer
+      name: mongo-ca-issuer
+  backend:
+    externallyManaged: false
+    backendDB: "postgres"
+
+
+
+
+  

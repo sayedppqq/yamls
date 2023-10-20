@@ -6,10 +6,10 @@ spec:
   image: sayedppqq/mongodb:sayed_mongo_linux_amd64
   args:
   - backup
-  - --scratchDir=${scratchDir:=/tmp}
+  - --scratch-dir=${scratchDir:=/tmp}
   - --namespace=${namespace:=default}
-  - --backupSession=${backupSession:=}
-  - --mongoArgs=${mongoArgs:=}
+  - --backupsession=${backupSession:=}
+  - --mongo-args=${mongoArgs:=}
 ---
 apiVersion: addons.kubestash.com/v1alpha1
 kind: Function
@@ -19,8 +19,8 @@ spec:
   image: sayedppqq/mongodb:sayed_mongo_linux_amd64
   args:
   - restore
-  - --scratchDir=${scratchDir:=/tmp}
+  - --scratch-dir=${scratchDir:=/tmp}
   - --namespace=${namespace:=default}
-  - --restoreSession=${restoreSession:=}
-  - --snapshotName=${snapshotName:=}
-  - --mongoArgs=${mongoArgs:=}
+  - --restoresession=${restoreSession:=}
+  - --snapshot=${snapshot:=}
+  - --mongo-args=${mongoArgs:=}

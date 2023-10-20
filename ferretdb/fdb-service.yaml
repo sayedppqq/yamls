@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ferretdb-clusterip-service
+spec:
+  selector:
+    app: ferretdb
+  ports:
+    - port: 27017 # The port you want to forward
+      targetPort: 27017 # The port your FerretDB container is listening on

@@ -5,7 +5,7 @@ metadata:
   namespace: demo
 spec:
   target:
-    name: mongo
+    name: mg-shard
     namespace: demo
     apiGroup: kubedb.com
     kind: MongoDB

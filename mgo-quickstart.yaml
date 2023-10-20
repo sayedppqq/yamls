@@ -1,11 +1,10 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mongo
+  name: mg-stantalone
   namespace: demo
 spec:
-  version: "4.2.24"
-  sslMode: disabled
+  version: "5.0.3"
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -13,5 +12,11 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 200Mi
+        storage: 100Mi
+  sslMode: requireSSL
+  tls:
+    issuerRef:
+      apiGroup: "cert-manager.io"
+      kind: Issuer
+      name: mongo-ca
   terminationPolicy: WipeOut

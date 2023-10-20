@@ -1,0 +1,56 @@
+# services:
+#   postgres:
+#     image: postgres
+#     environment:
+#       - POSTGRES_USER=username
+#       - POSTGRES_PASSWORD=password
+#       - POSTGRES_DB=ferretdb
+
+#   mongodb:
+#     image: mongo
+#     restart: unless-stopped
+#     ports:
+#       - 27018:27018
+
+# networks:
+#   default:
+#     name: ferretdb
+
+# services:
+#   postgres:
+#     image: postgres
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=random
+#       - POSTGRES_DB=ferretdb
+#     volumes:
+#       - ./data:/var/lib/postgresql/data
+
+#   ferretdb:
+#     image: ghcr.io/ferretdb/ferretdb
+#     restart: on-failure
+#     ports:
+#       - 27017:27017
+#     environment:
+#       - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/ferretdb
+
+# networks:
+#   default:
+#     name: ferretdb
+
+services:
+
+  ferretdb:
+    image: ghcr.io/ferretdb/ferretdb
+    restart: on-failure
+    ports:
+      - 27017:27017
+    environment:
+      - FERRETDB_HANDLER=sqlite
+      - FERRETDB_SQLITE_URL=file:/data/
+    volumes:
+      - ./data:/data/
+    
+networks:
+  default:
+    name: ferretdb
