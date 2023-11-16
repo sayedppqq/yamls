@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postgresdb
-          image: postgres
+          image: postgres:14
           ports:
             - containerPort: 5432
           env:
@@ -27,17 +27,13 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgres/data
               name: db-data
-              
         - name: ferretdb
-          image: ghcr.io/ferretdb/ferretdb
+          image: ghcr.io/ferretdb/ferretdb:1.13.0
           ports:
-            - containerPort: 27011
-
+            - containerPort: 27017
           env:
-
             - name: FERRETDB_POSTGRESQL_URL
               value: postgres://127.0.0.1:5432/ferretdb
-            
       volumes:
         - name: db-data
           persistentVolumeClaim:

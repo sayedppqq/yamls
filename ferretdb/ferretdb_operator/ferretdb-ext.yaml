@@ -6,7 +6,8 @@ metadata:
 spec:
   version: "1.12.1"
   authSecret:
-    externallyManaged: false
+    externallyManaged: true
+    name: quick-postgres-auth
   sslMode: disabled
   storageType: Durable
   storage:
@@ -17,13 +18,11 @@ spec:
       requests:
         storage: 100Mi  
   backend:
-    externallyManaged: false
+    externallyManaged: true
     backendDB: "postgres"
+    postgresInfo:
+      serviceInfo:
+        name: quick-postgres-pods
+        namespace: demo
+        pgPort: "5432"
   terminationPolicy: Delete
-  monitor:
-    agent: prometheus.io/operator
-    prometheus:
-      serviceMonitor:
-        labels:
-          release: prometheus
-        interval: 10s

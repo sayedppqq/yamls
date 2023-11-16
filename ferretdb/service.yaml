@@ -3,9 +3,15 @@ kind: Service
 metadata:
   name: ferretdb-clusterip-service
   namespace: demo
+  labels:
+    app: ferretdb-prom
 spec:
   selector:
     app: ferretdb
   ports:
-    - port: 27018 # The port you want to forward
-      targetPort: 27018 # The port your FerretDB container is listening on
+    - port: 27017 # The port you want to forward
+      targetPort: 27017 # The port your FerretDB container is listening on
+      name: db
+    - port: 8080 # The port you want to forward
+      targetPort: 8080 # The port your FerretDB container is listening on  
+      name: prom    

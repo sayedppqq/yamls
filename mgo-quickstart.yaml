@@ -1,10 +1,10 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mg-stantalone
+  name: mg-standalone
   namespace: demo
 spec:
-  version: "5.0.3"
+  version: "4.4.6"
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -13,10 +13,12 @@ spec:
     resources:
       requests:
         storage: 100Mi
-  sslMode: requireSSL
-  tls:
-    issuerRef:
-      apiGroup: "cert-manager.io"
-      kind: Issuer
-      name: mongo-ca
+  sslMode: disabled
   terminationPolicy: WipeOut
+  monitor:
+    agent: prometheus.io/operator
+    prometheus:
+      serviceMonitor:
+        labels:
+          release: prometheus
+        interval: 10s

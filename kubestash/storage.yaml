@@ -10,7 +10,7 @@ spec:
       endpoint: us-east-1.linodeobjects.com
       bucket: abusayed
       region: us-east-1
-      prefix: test30Aug
+      prefix: demo
       secret: s3-secret
   usagePolicy:
     allowedNamespaces:

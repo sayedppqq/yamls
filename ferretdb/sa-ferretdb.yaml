@@ -15,9 +15,12 @@ spec:
     spec:
       containers:
         - name: ferretdb
-          image: ghcr.io/ferretdb/ferretdb
+          image: ghcr.io/ferretdb/ferretdb:1.13.0
           ports:
             - containerPort: 27017
+              name: db
+            - containerPort: 8080
+              name: prom
           env:
             - name: FERRETDB_POSTGRESQL_URL
               value: "postgres://postgres-service.demo.svc.cluster.local:1/ferretdb"

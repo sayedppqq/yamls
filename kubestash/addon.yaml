@@ -10,7 +10,7 @@ spec:
     driver: Restic
     parameters:
     - name: mongoArgs
-      usage: Specifies the database args 
+      usage: Specifies the database args for taking backup
       required: false
   restoreTasks:
   - name: mongodb-restore
@@ -19,5 +19,5 @@ spec:
     driver: Restic
     parameters:
     - name: mongoArgs
-      usage: Specifies the database args 
+      usage: Specifies the database args for restore
       required: false

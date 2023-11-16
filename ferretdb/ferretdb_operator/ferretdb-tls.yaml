@@ -1,13 +1,18 @@
 apiVersion: kubedb.dev.my.domain/v1alpha2
 kind: FerretDB
 metadata:
-  name: ferretdb-sample
+  name: ferretdb-sample-tls
   namespace: demo
 spec:
   version: "1.12.1"
   authSecret:
     externallyManaged: false
-  sslMode: disabled
+  sslMode: requireSSL
+  tls:
+    issuerRef:
+      apiGroup: "cert-manager.io"
+      kind: Issuer
+      name: mongo-ca-issuer
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -26,4 +31,4 @@ spec:
       serviceMonitor:
         labels:
           release: prometheus
-        interval: 10s
+        interval: 10s  

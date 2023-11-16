@@ -1,10 +1,10 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mg-shard
+  name: mg-sh
   namespace: demo
 spec:
-  version: "5.0.3"
+  version: "4.4.6"
   shardTopology:
     configServer:
       replicas: 3

@@ -5,7 +5,7 @@ metadata:
   namespace: demo
 spec:
   target:
-    name: mg-shard
+    name: mg-standalone
     namespace: demo
     apiGroup: kubedb.com
     kind: MongoDB
@@ -16,6 +16,6 @@ spec:
       name: encry-secret 
       namespace: demo
   addon:
-    name: mongodb
+    name: mongodb-addon
     tasks:
-      - name: mongodb-restore
+      - name: LogicalBackupRestore

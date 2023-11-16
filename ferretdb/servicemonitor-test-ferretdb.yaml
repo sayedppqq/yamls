@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fr-service-monitor
+  namespace: demo
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: ferretdb-prom
+  endpoints:
+    - port: prom
+      path: /debug/metrics
+      interval: 15s

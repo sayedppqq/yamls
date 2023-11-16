@@ -1,10 +1,10 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mg-replicaset
+  name: mg-rep
   namespace: demo
 spec:
-  version: "5.0.3"
+  version: "4.4.6"
   replicaSet: 
     name: "replicaset"
   replicas: 2
@@ -16,10 +16,5 @@ spec:
     resources:
       requests:
         storage: 100Mi
-  sslMode: requireSSL
-  tls:
-    issuerRef:
-      apiGroup: "cert-manager.io"
-      kind: Issuer
-      name: mongo-ca   
+  sslMode: disabled 
   terminationPolicy: WipeOut

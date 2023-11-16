@@ -8,13 +8,11 @@ spec:
     apiGroup: kubedb.com
     kind: MongoDB
     namespace: demo
-    name: mg-shard
+    name: mg-standalone
   backends:
     - name: s3-backend
       storageRef:
-        apiGroup: storage.kubestash.com
         namespace: demo
-        kind: BackupStorage
         name: s3-storage
       retentionPolicy:
         name: manifest-rp
@@ -33,9 +31,9 @@ spec:
           backend: s3-backend
           directory: /mongo
           encryptionSecret:
-           name: encry-secret # some addon may not support encryption
+           name: encry-secret
            namespace: demo
       addon:
-        name: mongodb
+        name: mongodb-addon
         tasks:
-          - name: mongodb-backup
+          - name: LogicalBackup
