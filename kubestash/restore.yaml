@@ -1,11 +1,11 @@
 apiVersion: core.kubestash.com/v1alpha1
 kind: RestoreSession
 metadata:
-  name: mongodb-restoresession
+  name: mg-restore
   namespace: demo
 spec:
   target:
-    name: mg-standalone
+    name: mg-standalone-1
     namespace: demo
     apiGroup: kubedb.com
     kind: MongoDB

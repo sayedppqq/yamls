@@ -1,0 +1,32 @@
+apiVersion: kubedb.com/v1alpha2
+kind: MongoDB
+metadata:
+  name: simple
+  namespace: demo
+spec:
+  version: "4.4.26"
+  terminationPolicy: WipeOut
+  storage:
+    # storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    #  storageClassName: standard-rwo
+  replicas: 3
+  replicaSet:
+    name: "rs1"
+  monitor:
+    agent: prometheus.io/operator
+    prometheus:
+      serviceMonitor:
+        labels:
+          release: prometheus
+      exporter:
+        args: ["--compatible-mode"]
+  # monitor:
+  #   agent: prometheus.io/builtin
+  #   prometheus:
+  #     exporter:
+  #       args: ["--compatible-mode"]

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: check
+  template:
+    metadata:
+      labels:
+        app: check
+    spec:
+      containers:
+        - name: check
+          image: sayedppqq/check:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

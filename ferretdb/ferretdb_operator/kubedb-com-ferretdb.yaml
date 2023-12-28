@@ -1,0 +1,26 @@
+apiVersion: metrics.appscode.com/v1alpha1
+kind: MetricsConfiguration
+metadata:
+  name: kubedb-com-ferretdb
+spec:
+  targetRef:
+    apiVersion: kubedb.dev.my.domain/v1alpha2
+    kind: MongoDB
+  commonLabels:
+    - key: app
+      valuePath: .metadata.name
+    - key: app_namespace
+      valuePath: .metadata.namespace
+  metrics:
+    - name: created
+      help: "Unix creation timestamp"
+      type: gauge
+      field:
+        path: .metadata.creationTimestamp
+        type: DateTime
+      metricValue:
+        valueFromPath: .metadata.creationTimestamp
+
+
+
+# Grafana Version : USE 8.5.11

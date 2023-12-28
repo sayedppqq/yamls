@@ -1,25 +1,38 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: mg-sh
+  name: simple
   namespace: demo
 spec:
-  version: "4.4.6"
+  version: 4.4.26
   shardTopology:
     configServer:
       replicas: 3
       storage:
         resources:
           requests:
-            storage: 250Mi
-        storageClassName: standard
+            storage: 1Gi
+        # storageClassName: standard
     mongos:
-      replicas: 1
+      replicas: 2
     shard:
       replicas: 3
       shards: 2
       storage:
         resources:
           requests:
-            storage: 250Mi
-        storageClassName: standard
+            storage: 1Gi
+        # storageClassName: standard
+  monitor:
+    agent: prometheus.io/operator
+    prometheus:
+      serviceMonitor:
+        labels:
+          release: prometheus
+      exporter:
+        args: ["--compatible-mode"]  
+  # monitor:
+  #   agent: prometheus.io/builtin
+  #   prometheus:
+  #     exporter:
+  #       args: ["--compatible-mode"]      

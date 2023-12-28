@@ -1,12 +1,10 @@
 apiVersion: kubedb.com/v1alpha2
-kind: MongoDB
+kind: Postgres
 metadata:
-  name: mg-rep
+  name: ha-postgres
   namespace: demo
 spec:
-  version: "4.4.6"
-  replicaSet: 
-    name: "replicaset"
+  version: "13.2"
   replicas: 3
   storageType: Durable
   storage:
@@ -15,14 +13,10 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1G
-  sslMode: disabled 
-  terminationPolicy: WipeOut
+        storage: 1Gi
   monitor:
     agent: prometheus.io/operator
     prometheus:
       serviceMonitor:
         labels:
-          release: prometheus
-      exporter:
-        args: ["--compatible-mode"]  
+          release: prometheus          

@@ -1,24 +1,14 @@
 apiVersion: ops.kubedb.com/v1alpha1
 kind: MongoDBOpsRequest
 metadata:
-  name: mops-add-tls
+  name: update
   namespace: demo
 spec:
-  type: ReconfigureTLS
+  type: UpdateVersion
   databaseRef:
-    name: mongo-sh
-  tls:
-    issuerRef:
-      name: mongo-ca-issuer
-      kind: Issuer
-      apiGroup: "cert-manager.io"
-    certificates:
-      - alias: client
-        subject:
-          organizations:
-            - mongo
-          organizationalUnits:
-            - client
+    name: mg-rep
+  updateVersion:
+    targetVersion: 4.4.25
   readinessCriteria:
     oplogMaxLagSeconds: 20
     objectsCountDiffPercentage: 10

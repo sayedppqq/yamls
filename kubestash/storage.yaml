@@ -8,12 +8,11 @@ spec:
     provider: s3
     s3:
       endpoint: us-east-1.linodeobjects.com
-      bucket: abusayed
+      bucket: kubestash-testing
       region: us-east-1
       prefix: demo
       secret: s3-secret
   usagePolicy:
     allowedNamespaces:
       from: All
-  default: true 
   deletionPolicy: WipeOut

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  annotations:
+    monitoring.appscode.com/agent: prometheus.io/builtin
+    prometheus.io/path: /metrics
+    prometheus.io/port: "10250"
+    prometheus.io/scrape: "true"
+  labels:
+    app.kubernetes.io/managed-by: prometheus-builtin
+    app.kubernetes.io/name: kubelet
+    k8s-app: kubelet
+  name: prometheus-kube-prometheus-kubelet
+  namespace: kube-system
+subsets:
+  - addresses:
+      - ip: 192.168.129.199
+        targetRef:
+          kind: Node
+          name: lke143740-211112-076421a10000
+          uid: cbae859e-9e9d-4686-843e-32a4017b1a3f
+      - ip: 192.168.221.29
+        targetRef:
+          kind: Node
+          name: lke143740-211112-4a6641f20000
+          uid: 5f2c4708-6222-47bd-b1c5-ff7648f45b28
+      - ip: 192.168.129.200
+        targetRef:
+          kind: Node
+          name: lke143740-211112-4c0ed8490000
+          uid: cc1b5e03-859e-4a23-ac6a-1582c8460b70
+    ports:
+      - name: https-metrics
+        port: 10250
+        protocol: TCP
+      - name: http-metrics
+        port: 10255
+        protocol: TCP
+      - name: cadvisor
+        port: 4194
+        protocol: TCP

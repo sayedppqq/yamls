@@ -1,0 +1,69 @@
+--CPU Usage
+FROM
+sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+
+TO
+sum(sum by (namespace, pod, container) (irate(container_cpu_usage_seconds_total{image!="",job="kubelet",metrics_path="/metrics/cadvisor",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}[5m])) * on (namespace, pod) group_left (node) topk by (namespace, pod) (1, max by (namespace, pod, node) (kube_pod_info{node!="",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}))) by (pod)
+
+--CPU Quota
+A
+FROM
+sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(sum by (namespace, pod, container) (irate(container_cpu_usage_seconds_total{image!="",job="kubelet",metrics_path="/metrics/cadvisor",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}[5m])) * on (namespace, pod) group_left (node) topk by (namespace, pod) (1, max by (namespace, pod, node) (kube_pod_info{node!="",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}))) by (pod)
+
+B
+FROM
+sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(kube_pod_container_resource_requests{job="kube-state-metrics",resource="cpu",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace,pod) group_left () max by (namespace,pod) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+C
+FROM
+sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod) / sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(sum by (namespace, pod, container) (irate(container_cpu_usage_seconds_total{image!="",job="kubelet",metrics_path="/metrics/cadvisor",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}[5m])) * on (namespace, pod) group_left (node) topk by (namespace, pod) (1, max by (namespace, pod, node) (kube_pod_info{node!="",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}))) by (pod) / sum(kube_pod_container_resource_requests{job="kube-state-metrics",resource="cpu",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace,pod) group_left () max by (namespace,pod) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+D
+FROM
+sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(kube_pod_container_resource_limits{job="kube-state-metrics",resource="cpu",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace,pod) group_left() max by (namespace, pod) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+E
+FROM
+sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod) / sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(sum by (namespace, pod, container) (irate(container_cpu_usage_seconds_total{image!="",job="kubelet",metrics_path="/metrics/cadvisor",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}[5m])) * on (namespace, pod) group_left (node) topk by (namespace, pod) (1, max by (namespace, pod, node) (kube_pod_info{node!="",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}))) by (pod) / sum(kube_pod_container_resource_limits{job="kube-state-metrics",resource="cpu",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace,pod) group_left() max by (namespace, pod) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+-- Memory Usage
+FROM
+sum(node_namespace_pod_container:container_memory_working_set_bytes{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$",container!=""}) by (pod)
+TO
+sum(container_memory_working_set_bytes{image!="",job="kubelet",metrics_path="/metrics/cadvisor",namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$",container!=""} * on (namespace, pod) group_left (node) topk by (namespace, pod) (1, max by (namespace, pod, node) (kube_pod_info{node!=""}))) by (pod)
+
+=======================from here variable is uprooted
+-- Memory Quota
+B
+FROM
+sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum (kube_pod_container_resource_requests{job="kube-state-metrics",resource="memory",namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace, pod, cluster) group_left () max by (namespace, pod, cluster) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+C
+FROM
+sum(container_memory_working_set_bytes{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$",container!="", image!=""}) by (pod) / sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(container_memory_working_set_bytes{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$",container!="", image!=""}) by (pod) / sum(kube_pod_container_resource_requests{job="kube-state-metrics",resource="memory",namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace, pod, cluster) group_left () max by (namespace, pod, cluster) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+D
+FROM
+sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_limits{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(kube_pod_container_resource_limits{job="kube-state-metrics",resource="memory",namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace, pod, cluster) group_left () max by (namespace, pod, cluster) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)
+
+E
+FROM
+sum(container_memory_working_set_bytes{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$",container!="", image!=""}) by (pod) / sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_limits{namespace="$namespace", pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"}) by (pod)
+TO
+sum(container_memory_working_set_bytes{namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$",container!="", image!=""}) by (pod) / sum(kube_pod_container_resource_limits{job="kube-state-metrics",resource="memory",namespace="$namespace",pod=~"$app-\\d+$|$app-shard\\d+-\\d+$"} * on (namespace, pod, cluster) group_left () max by (namespace, pod, cluster) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))) by (pod)

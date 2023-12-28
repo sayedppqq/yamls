@@ -1,0 +1,107 @@
+apiVersion: kubedb.com/v1alpha2
+kind: MongoDB
+metadata:
+  name: mongo
+  namespace: demo
+spec:
+  version: "4.4.6"
+  serviceTemplates:
+  - alias: primary
+    metadata:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=5
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb-ip"
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+        external-dns.alpha.kubernetes.io/hostname: mongo.vyrl.co
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:422025336571:certificate/632de120-404f-4226-9204-a872319fb995
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+        # service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+        # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    spec:
+      type: LoadBalancer
+      ports:
+        - name: primary
+          port: 27017
+          nodePort: 30006
+  shardTopology:
+    configServer:
+      replicas: 3
+      podTemplate:
+        metadata:
+          annotations:
+            ad.datadoghq.com/mongodb.checks: |
+              {
+                "mongo": {
+                  "init_config": {},
+                  "instances": [
+                    {
+                      "hosts": ["%%host%%:%%port%%"], 
+                      "username": "datadog", 
+                      "password": "LUUNDDAIcLBuCk1EkFA5", 
+                      "database": "admin"
+                    }
+                  ]
+                }
+              }
+      storage:
+        resources:
+          requests:
+            storage: 10Gi
+        # storageClassName: "gp2"
+    mongos:
+      replicas: 2
+      podTemplate:
+        metadata:
+          annotations:
+            ad.datadoghq.com/mongodb.checks: |
+              {
+                "mongo": {
+                  "init_config": {},
+                  "instances": [
+                    {
+                      "hosts": ["%%host%%:%%port%%"], 
+                      "username": "datadog", 
+                      "password": "LUUNDDAIcLBuCk1EkFA5", 
+                      "database": "admin"
+                    }
+                  ]
+                }
+              }
+    shard:
+      replicas: 2
+      podTemplate:
+        metadata:
+          annotations:
+            ad.datadoghq.com/mongodb.checks: |
+              {
+                "mongo": {
+                  "init_config": {},
+                  "instances": [
+                    {
+                      "hosts": ["%%host%%:%%port%%"], 
+                      "username": "datadog", 
+                      "password": "LUUNDDAIcLBuCk1EkFA5", 
+                      "database": "admin"
+                    }
+                  ]
+                }
+              }
+        spec:
+          resources:
+            requests:
+              cpu: "2"
+              memory: "10Gi"
+      shards: 1
+      storage:
+        resources:
+          requests:
+            storage: 300Gi
+        # storageClassName: "gp2"
+  arbiter:
+    podTemplate:
+      spec:
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "200Mi"
+  terminationPolicy: WipeOut
