@@ -15,15 +15,15 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 100Mi  
+        storage: 500Mi  
   backend:
     externallyManaged: false
     backendDB: "postgres"
   terminationPolicy: Delete
-  monitor:
-    agent: prometheus.io/operator
-    prometheus:
-      serviceMonitor:
-        labels:
-          release: prometheus
-        interval: 10s
+  # monitor:
+  #   agent: prometheus.io/operator
+  #   prometheus:
+  #     serviceMonitor:
+  #       labels:
+  #         release: prometheus
+  #       interval: 10s

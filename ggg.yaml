@@ -1,22 +1,67 @@
 apiVersion: kubedb.com/v1alpha2
-kind: Postgres
+kind: MongoDB
 metadata:
-  name: ha-postgres
+  name: mg-sh
   namespace: demo
 spec:
-  version: "13.2"
-  replicas: 3
+  arbiter:
+    podTemplate:
+      spec:
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+  clusterAuthMode: keyFile
+  shardTopology:
+    configServer:
+      podTemplate:
+        spec:
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 300m
+              memory: 400Mi
+      replicas: 3
+      storage:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        # storageClassName: standard
+    mongos:
+      podTemplate:
+        spec:
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 300m
+              memory: 400Mi
+      replicas: 3
+    shard:
+      podTemplate:
+        spec:
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 300m
+              memory: 400Mi
+      replicas: 3
+      shards: 2
+      storage:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        # storageClassName: standard
+  sslMode: disabled
+  storageEngine: wiredTiger
   storageType: Durable
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
-  monitor:
-    agent: prometheus.io/operator
-    prometheus:
-      serviceMonitor:
-        labels:
-          release: prometheus          
+  terminationPolicy: WipeOut
+  version: 7.0.4

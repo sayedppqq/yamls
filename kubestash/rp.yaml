@@ -1,7 +1,7 @@
 apiVersion: storage.kubestash.com/v1alpha1
 kind: RetentionPolicy
 metadata:
-  name: manifest-rp
+  name: rp
   namespace: demo
 spec:
   maxRetentionPeriod: 2mo

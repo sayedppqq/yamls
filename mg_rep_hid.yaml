@@ -1,0 +1,44 @@
+apiVersion: kubedb.com/v1alpha2
+kind: MongoDB
+metadata:
+  name: mongo-rs-hid
+  namespace: demo
+spec:
+  hidden:
+    podTemplate:
+      spec:
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+    replicas: 2
+    storage:
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: standard
+  podTemplate:
+    spec:
+      resources:
+        limits:
+          memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 400Mi
+  replicaSet:
+    name: rs
+  replicas: 3
+  sslMode: disabled
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: standard
+  storageEngine: wiredTiger
+  storageType: Durable
+  terminationPolicy: WipeOut
+  version: 7.0.4

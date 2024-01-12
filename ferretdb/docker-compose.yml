@@ -20,22 +20,17 @@ services:
   postgres:
     image: postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=random
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=ferretdb
-    ports:
-      - 5432:5432
     volumes:
       - ./data:/var/lib/postgresql/data
 
   ferretdb:
-    #image: ghcr.io/ferretdb/ferretdb:1.13.0
-    #image: ghcr.io/ferretdb/ferretdb:1.14.0
-    image: ghcr.io/ferretdb/ferretdb:1.10.1
+    image: ghcr.io/ferretdb/ferretdb
     restart: on-failure
     ports:
       - 27017:27017
-      - 8088:8088
     environment:
       - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/ferretdb
 

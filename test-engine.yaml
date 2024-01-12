@@ -1,14 +1,23 @@
-apiVersion: engine.kubevault.com/v1alpha1
-kind: SecretEngine
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
 metadata:
-  name: mongo-hostedapp2-mongo-secret-engine-test
-  namespace: test
+  name: 7.0.4
 spec:
-  mongodb:
-    databaseRef:
-      name: mgo-quickstart-test
-      namespace: test
-    pluginName: mongodb-database-plugin
-  vaultRef:
-    name: vault
-    namespace: kubeops
+  db:
+    image: ghcr.io/appscode-images/mongo:7.0.4
+  distribution: Official
+  exporter:
+    image: ghcr.io/kubedb/mongodb_exporter:v0.32.0
+  initContainer:
+    image: ghcr.io/kubedb/mongodb-init:6.0-v8
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+  replicationModeDetector:
+    image: ghcr.io/kubedb/replication-mode-detector:v0.24.0
+  stash:
+    addon:
+      backupTask:
+        name: mongodb-backup-6.0.5
+      restoreTask:
+        name: mongodb-restore-6.0.5
+  version: 7.0.4

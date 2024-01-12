@@ -8,19 +8,32 @@ spec:
     apiGroup: kubedb.com
     kind: MongoDB
     namespace: demo
-    name: sample-mongodb
+    name: simple
   backends:
     - name: s3-backend
       storageRef:
         namespace: demo
         name: s3-storage
       retentionPolicy:
-        name: backup-rp
-        namespace: demo        
+        name: rp
+        namespace: demo    
   sessions:
     - name: frequent
       scheduler:
         schedule: "*/1 * * * *"
+        jobTemplate:
+          template:
+            spec:
+              securityContext:
+                runAsUser: 999
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              containerSecurityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL                        
       repositories:
         - name: s3-repo
           backend: s3-backend
@@ -31,6 +44,17 @@ spec:
       addon:
         name: mongodb-addon
         tasks:
-          - name: LogicalBackup
-            params:
-              args: "--db=test"
+        - name: LogicalBackup
+        containerRuntimeSettings:
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+        jobTemplate:
+          spec: 
+            securityContext: 
+              runAsUser: 999
+              runAsNonRoot: true
+              seccompProfile:
+                type: RuntimeDefault                  

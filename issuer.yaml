@@ -6,3 +6,12 @@ metadata:
 spec:
   ca:
     secretName: mongo-ca
+
+# apiVersion: cert-manager.io/v1
+# kind: Issuer
+# metadata:
+#   name: mg-new-issuer
+#   namespace: demo
+# spec:
+#   ca:
+#     secretName: mongo-new-ca

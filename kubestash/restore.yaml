@@ -5,7 +5,7 @@ metadata:
   namespace: demo
 spec:
   target:
-    name: mg-standalone-1
+    name: simple
     namespace: demo
     apiGroup: kubedb.com
     kind: MongoDB
@@ -19,3 +19,17 @@ spec:
     name: mongodb-addon
     tasks:
       - name: LogicalBackupRestore
+  runtimeSettings:
+    pod:
+      securityContext:
+        runAsUser: 999
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+    container:
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+                

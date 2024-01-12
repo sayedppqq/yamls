@@ -1,16 +1,132 @@
+# apiVersion: ops.kubedb.com/v1alpha1
+# kind: MongoDBOpsRequest
+# metadata:
+#   name: mop
+#   namespace: demo
+# spec:
+#   apply: IfReady
+#   databaseRef:
+#     name: mg-sh
+#   type: VerticalScaling
+#   verticalScaling:
+#     # arbiter:
+#     # # resources:
+#     #   limits:
+#     #     cpu: 600m
+#     #     memory: 1250Mi
+#     #   requests:
+#     #     cpu: 550m
+#     #     memory: 1100Mi
+#     shard:
+#     # resources:
+#       requests:
+#         memory: "1100Mi"
+#         cpu: "0.55"
+#       limits:
+#         memory: "1100Mi"
+#         cpu: "0.55"
+#     configServer:
+#     # resources:
+#       requests:
+#         memory: "1100Mi"
+#         cpu: "0.55"
+#       limits:
+#         memory: "1100Mi"
+#         cpu: "0.55"
+#     mongos:
+#     # resources:
+#       requests:
+#         memory: "1100Mi"
+#         cpu: "0.55"
+#       limits:
+#         memory: "1100Mi"
+#         cpu: "0.55"
+
+# apiVersion: ops.kubedb.com/v1alpha1
+# kind: MongoDBOpsRequest
+# metadata:
+#   name: mop
+#   namespace: demo
+# spec:
+#   apply: IfReady
+#   databaseRef:
+#     name: mg-sh
+#   type: VerticalScaling
+#   verticalScaling:
+#     arbiter:
+#       resources:
+#         limits:
+#           # cpu: 3000m
+#           memory: 1050Mi
+#         requests:
+#           cpu: 550m
+#           memory: 1000Mi
+#     configServer:
+#       resources:
+#         limits:
+#           # cpu: 3000m
+#           memory: 1050Mi
+#         requests:
+#           cpu: 550m
+#           memory: 1000Mi
+#     mongos:
+#       resources:
+#         limits:
+#           # cpu: 3000m
+#           memory: 1050Mi
+#         requests:
+#           cpu: 550m
+#           memory: 1000Mi
+#     shard:
+#       resources:
+#         limits:
+#           # cpu: 3000m
+#           memory: 1050Mi
+#         requests:
+#           cpu: 550m
+#           memory: 1000Mi
+
+
 apiVersion: ops.kubedb.com/v1alpha1
 kind: MongoDBOpsRequest
 metadata:
-  name: update
+  name: mop
   namespace: demo
 spec:
-  type: UpdateVersion
-  databaseRef:
-    name: mg-rep
-  updateVersion:
-    targetVersion: 4.4.25
-  readinessCriteria:
-    oplogMaxLagSeconds: 20
-    objectsCountDiffPercentage: 10
-  timeout: 5m
   apply: IfReady
+  databaseRef:
+    name: mg-sh
+  type: VerticalScaling
+  verticalScaling:
+    arbiter:
+      # resources:
+      limits:
+        # cpu: 2
+        memory: 1250Mi
+      requests:
+        cpu: 550m
+        memory: 1100Mi
+    configServer:
+      # resources:
+      limits:
+        # cpu: 2
+        memory: 1250Mi
+      requests:
+        cpu: 550m
+        memory: 1100Mi
+    mongos:
+      # resources:
+      limits:
+        # cpu: 2
+        memory: 1250Mi
+      requests:
+        cpu: 550m
+        memory: 1100Mi
+    shard:
+      # resources:
+      limits:
+        # cpu: 2
+        memory: 1250Mi
+      requests:
+        cpu: 550m
+        memory: 1100Mi

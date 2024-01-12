@@ -1,0 +1,59 @@
+apiVersion: ops.kubedb.com/v1alpha1
+kind: MongoDBOpsRequest
+metadata:
+  name: mop
+  namespace: demo
+spec:
+  apply: IfReady
+  databaseRef:
+    name: mg-sh
+  type: VerticalScaling
+  verticalScaling:
+    # arbiter:
+    #   resources:
+    #     limits:
+    #       cpu: 600m
+    #       memory: 1250Mi
+    #     requests:
+    #       cpu: 550m
+    #       memory: 1100Mi
+    # configServer:
+    #   resources:
+    #     limits:
+    #       cpu: 600m
+    #       memory: 1250Mi
+    #     requests:
+    #       cpu: 550m
+    #       memory: 1100Mi
+    # mongos:
+    #   # resources:
+    #   limits:
+    #     cpu: 600m
+    #     memory: 1250Mi
+    #   requests:
+    #     cpu: 550m
+    #     memory: 1100Mi
+    # shard:
+    #   # resources:
+    #   limits:
+    #     cpu: 600m
+    #     memory: 1250Mi
+    #   requests:
+    #     cpu: 550m
+    #     memory: 1100Mi
+    mongos:
+      resources:
+        limits:
+          cpu: 3000m
+          memory: 1G
+        requests:
+          cpu: 1000m
+          memory: 2000Mi
+    shard:
+      resources:
+        limits:
+          cpu: 3000m
+          memory: 1G
+        requests:
+          cpu: 1000m
+          memory: 2000Mi    

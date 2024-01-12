@@ -1,0 +1,13 @@
+apiVersion: ops.kubedb.com/v1alpha1
+kind: MongoDBOpsRequest
+metadata:
+  name: hor
+  namespace: demo
+spec:
+  apply: IfReady
+  databaseRef:
+    name: mongo-rs-hid
+  horizontalScaling:
+    hidden:
+      replicas: 1
+  type: HorizontalScaling

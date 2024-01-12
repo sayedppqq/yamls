@@ -1,28 +1,39 @@
 apiVersion: kubedb.com/v1alpha2
-kind: Kafka
+kind: MongoDB
 metadata:
-  name: kafka-prod
+  name: mg-sh
   namespace: demo
 spec:
-  version: 3.4.0
-  topology:
-    broker:
+  # arbiter:
+  #   podTemplate:
+  #     spec:
+  #       resources:
+  #         limits:
+  #           memory: 1Gi
+  #         requests:
+  #           cpu: 500m
+  #           memory: 1Gi
+  clusterAuthMode: keyFile
+  shardTopology:
+    configServer:
       replicas: 3
       storage:
-        accessModes:
-          - ReadWriteOnce
         resources:
           requests:
             storage: 1Gi
-        storageClassName: standard
-    controller:
+        # storageClassName: standard
+    mongos:
       replicas: 3
+    shard:
+      replicas: 3
+      shards: 2
       storage:
-        accessModes:
-          - ReadWriteOnce
         resources:
           requests:
             storage: 1Gi
-        storageClassName: standard
+        # storageClassName: standard
+  sslMode: disabled
+  storageEngine: wiredTiger
   storageType: Durable
   terminationPolicy: WipeOut
+  version: 6.0.5

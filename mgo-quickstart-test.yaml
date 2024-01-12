@@ -4,10 +4,10 @@ metadata:
   name: mg-rep
   namespace: demo
 spec:
-  version: "4.4.6"
+  version: "7.0.4"
   replicaSet: 
     name: "replicaset"
-  replicas: 3
+  replicas: 2
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -16,13 +16,18 @@ spec:
     resources:
       requests:
         storage: 1G
-  sslMode: disabled 
+  # sslMode: requireSSL
+  # tls:
+  #   issuerRef:
+  #     apiGroup: "cert-manager.io"
+  #     kind: Issuer
+  #     name: mongo-ca-issuer    
   terminationPolicy: WipeOut
-  monitor:
-    agent: prometheus.io/operator
-    prometheus:
-      serviceMonitor:
-        labels:
-          release: prometheus
-      exporter:
-        args: ["--compatible-mode"]  
+  # monitor:
+  #   agent: prometheus.io/operator
+  #   prometheus:
+  #     serviceMonitor:
+  #       labels:
+  #         release: prometheus
+  #     exporter:
+  #       args: ["--compatible-mode"]  

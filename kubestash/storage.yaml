@@ -8,7 +8,7 @@ spec:
     provider: s3
     s3:
       endpoint: us-east-1.linodeobjects.com
-      bucket: kubestash-testing
+      bucket: abusayed
       region: us-east-1
       prefix: demo
       secret: s3-secret
@@ -16,3 +16,16 @@ spec:
     allowedNamespaces:
       from: All
   deletionPolicy: WipeOut
+  runtimeSettings:
+    pod:
+      securityContext:
+        runAsUser: 999
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+    container:
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL

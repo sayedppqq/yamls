@@ -1,13 +1,23 @@
-apiVersion: engine.kubevault.com/v1alpha1
-kind: SecretAccessRequest
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
 metadata:
-  name: read-access-req
-  namespace: demo
+  name: 7.0.4
 spec:
-  roleRef:
-    kind: MongoDBRole
-    name: mongodb-read-role
-  subjects:
-    - kind: ServiceAccount
-      name: read-access-svc-ac
-      namespace: demo
+  db:
+    image: ghcr.io/appscode-images/mongo:7.0.4
+  distribution: Official
+  exporter:
+    image: ghcr.io/kubedb/mongodb_exporter:v0.32.0
+  initContainer:
+    image: sayedppqq/mongodb-init:6.0-v9_linux_amd64
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+  replicationModeDetector:
+    image: ghcr.io/kubedb/replication-mode-detector:v0.24.0
+  stash:
+    addon:
+      backupTask:
+        name: mongodb-backup-6.0.5
+      restoreTask:
+        name: mongodb-restore-6.0.5
+  version: 7.0.4
