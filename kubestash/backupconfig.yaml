@@ -1,7 +1,7 @@
 apiVersion: core.kubestash.com/v1alpha1
 kind: BackupConfiguration
 metadata:
-  name: mg
+  name: mg7
   namespace: demo
 spec:
   target:
@@ -20,7 +20,7 @@ spec:
   sessions:
     - name: frequent
       scheduler:
-        schedule: "*/1 * * * *"
+        schedule: "*/10 * * * *"
         jobTemplate:
           template:
             spec:
@@ -35,9 +35,9 @@ spec:
                   drop:
                     - ALL                        
       repositories:
-        - name: s3-repo
+        - name: test7
           backend: s3-backend
-          directory: /mongodb
+          directory: /test7
           encryptionSecret:
            name: encry-secret
            namespace: demo

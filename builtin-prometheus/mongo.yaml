@@ -17,16 +17,16 @@ spec:
   replicas: 3
   replicaSet:
     name: "rs1"
-  monitor:
-    agent: prometheus.io/operator
-    prometheus:
-      serviceMonitor:
-        labels:
-          release: prometheus
-      exporter:
-        args: ["--compatible-mode"]
   # monitor:
-  #   agent: prometheus.io/builtin
+  #   agent: prometheus.io/operator
   #   prometheus:
+  #     serviceMonitor:
+  #       labels:
+  #         release: prometheus
   #     exporter:
   #       args: ["--compatible-mode"]
+  monitor:
+    agent: prometheus.io/builtin
+    prometheus:
+      exporter:
+        args: ["--compatible-mode"]

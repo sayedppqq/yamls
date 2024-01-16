@@ -5,13 +5,13 @@ metadata:
   namespace: demo
 spec:
   target:
-    name: simple
+    name: simple7
     namespace: demo
     apiGroup: kubedb.com
     kind: MongoDB
   dataSource:
     snapshot: latest
-    repository: s3-repo
+    repository: test7
     encryptionSecret:
       name: encry-secret 
       namespace: demo
