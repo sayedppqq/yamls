@@ -1,0 +1,6 @@
+services:
+  ubuntu:
+    image: ubuntu:latest
+    volumes:
+      - /home/sayed/go/src/yamls/mongo-shake:/tmp
+    command: ["bash", "-c", "sleep 3000"]

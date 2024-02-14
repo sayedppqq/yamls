@@ -1,0 +1,82 @@
+-------------------observation---------------------
+- full sync sync database completely from the begining ts
+- it needs 10-13 min to full sync 1GB with this conf
+    ```
+        # the number of collection concurrence
+        # 并发最大拉取的表个数，例如，6表示同一时刻shake最多拉取6个表。
+        full_sync.reader.collection_parallel = 12
+        # the number of document writer thread in each collection.
+        # 同一个表内并发写的线程数，例如，8表示对于同一个表，将会有8个写线程进行并发写入。
+        full_sync.reader.write_document_parallel = 12
+        # number of documents in a batch insert in a document concurrence
+        # 目的端写入的batch大小，例如，128表示一个线程将会一次聚合128个文档然后再写入。
+        full_sync.reader.document_batch_size = 256
+        # number of documents in a batch in fetch from source db
+        # 源端拉取batch中最大条数
+        full_sync.reader.fetch_batch_size = 1100
+        # max number of fetching thread per table. default is 1
+        # 单个表最大拉取的线程数，默认是单线程拉取。需要具备splitVector权限。
+        # 注意：对单个表来说，仅支持索引对应的value是同种类型，如果有不同类型请勿启用该配置项！
+        full_sync.reader.parallel_thread = 5
+    ```
+- incr sync: TL;DR flow lines: 73 => (76-79) => (60-61) => (67-70) => 52 => 54 => 46
+    - oplogStartPosition = 0
+    - fullSyncFinishPosition = 0
+    - startTsMap = 0
+
+    - for coordinator.RealSourceIncrSync(number of mongoD)
+        - prepare syncer NewOplogSyncer()
+            - create oplog reader with replset info
+            - create new batcher
+            - create persister
+        - syncer.Init() for HTTP api
+        - create sync group
+
+    - for conf.Options.IncrSyncWorker
+        - create worker and setup (w.Init())
+            - setup rest api
+            - init new NewWriteController(worker)
+                - install module
+                - create new factory for direct tunnel (factory holds )
+                - create tunnel.writer with tunnel factory
+                - tunnel.writter.prepare()
+                    - check target DB connection 
+                    - setup batch executor with replayerId and targetDB url
+                    - run conf.Options.IncrSyncExecutor go routine to execute batchBlock by executors[i].start()
+                    - for toBeExecuted := range exec.batchBlock and doSync(toBeExecuted). this doSync do final write into target.
+                
+        - bind worker with syncer
+        - run worker parallaly
+            - [Inf] get batch one by one and 
+                - batch = worker.findFirstAvailableBatch()
+                    - batch = <-worker.queue
+                - replyAndAcked := worker.writeController.Send(logs(batch), tag)
+                    - ....after some depth = batchExecutor.executors[index].batchBlock <- buf
+
+    - run syncer parallaly
+        - set up and load checkpoint manager(with the help of ckpt collection)
+        - start deserializer: parse data from pending queue, and then push into logs queue by sync.startDeserializer()
+            - [Con] go sync.deserializer(index)
+                - batchRawLogs := <-sync.PendingQueue[index]
+                - sync.logsQueue[index] <- deserializeLogs
+        - start batcher: pull oplog from logs queue and then batch together before adding into worker by sync.startBatcher()
+            - [Con-Inf] 
+                - batchedOplog, barrier, allEmpty, exit := batcher.BatchMore()
+                    - mergeBatch, exit := batcher.getBatchWithDelay()
+                        - mergeBatch = batcher.getBatch()
+                            - mergeBatch = <-syncer.logsQueue[batcher.currentQueue()]: break
+                            - mergeBatch = append(mergeBatch, <-syncer.logsQueue[batcher.nextQueue]...)
+                - push to worker by batcher.dispatchBatches(batchedOplog)
+                    - worker.queue <- batch
+        - [Inf] fetching oplog from source mongodb by sync.poll()
+            -[Con-Inf] sync.reader.StartFetcher() to fetch oplog from src MongoDB
+                - or.oplogChan <- &retOplog{or.oplogsCursor.Current, nil}
+            - [Inf] fetch oplog from reader to PendingQueue by sync.next()
+                - read log from reader by sync.reader.Next()
+                    - case ret := <-or.oplogChan:
+                           return ret.log, ret.err
+                - sync.persister.Inject(log) => p.PushToPendingQueue(input)
+                    - p.sync.PendingQueue[selected] <- p.Buffer(input)
+
+If it is a Sharding mode, then there need to be multiple "syncers" connecting to each shard.    
+Syncer flow: fetcher->PendingQ->deserializer->LogsQ->batcher->worker

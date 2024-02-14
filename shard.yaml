@@ -4,15 +4,15 @@ metadata:
   name: simple
   namespace: demo
 spec:
-  version: "7.0.4"
+  version: "4.4.26"
   shardTopology:
     configServer:
       replicas: 2
       storage:
         resources:
           requests:
-            storage: 1Gi
-        storageClassName: standard
+            storage: 5Gi
+        storageClassName: longhorn
     mongos:
       replicas: 1
     shard:
@@ -21,8 +21,8 @@ spec:
       storage:
         resources:
           requests:
-            storage: 1Gi
-        storageClassName: standard
+            storage: 5Gi
+        storageClassName: longhorn
   # monitor:
   #   agent: prometheus.io/operator
   #   prometheus:

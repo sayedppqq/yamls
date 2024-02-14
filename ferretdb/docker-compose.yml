@@ -34,9 +34,9 @@ services:
     environment:
       - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/ferretdb
 
-networks:
-  default:
-    name: ferretdb
+# networks:
+#   default:
+#     name: ferretdb
 
 # services:
 
