@@ -3,14 +3,17 @@ kind: MongoDB
 metadata:
   name: mg-rep
   namespace: demo
+  labels:
+    archiver: "true"  
 spec:
-  version: "7.0.4"
+  version: "4.4.26"
   replicaSet: 
     name: "replicaset"
   replicas: 2
   storageType: Durable
   storage:
     storageClassName: "standard"
+    # storageClassName: "longhorn"    
     accessModes:
     - ReadWriteOnce
     resources:
@@ -22,7 +25,7 @@ spec:
   #     apiGroup: "cert-manager.io"
   #     kind: Issuer
   #     name: mongo-ca-issuer    
-  terminationPolicy: WipeOut
+  # terminationPolicy: WipeOut
   # monitor:
   #   agent: prometheus.io/operator
   #   prometheus:

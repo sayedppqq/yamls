@@ -1,0 +1,36 @@
+apiVersion: core.kubestash.com/v1alpha1
+kind: BackupConfiguration
+metadata:
+  name: pvc-backup-l
+  namespace: demo
+spec:
+  target:
+    apiGroup:
+    kind: PersistentVolumeClaim
+    name:  datadir-simple-2-configsvr-0
+    namespace: demo
+  backends:
+    - name: s3-backend-l
+      storageRef:
+        namespace: demo
+        name: s3-storage
+      retentionPolicy:
+        name: rp
+        namespace: demo    
+  sessions:
+    - name: frequent
+      scheduler:
+        schedule: "*/2 * * * *"                   
+      repositories:
+        - name: pvc-l
+          backend: s3-backend-l
+          directory: /pvc-l
+          encryptionSecret:
+           name: encry-secret
+           namespace: demo
+      addon:
+        name: pvc-addon
+        tasks:
+          - name: volume-snapshot
+            params:
+              volumeSnapshotClassName: longhorn-snapshot-vsc

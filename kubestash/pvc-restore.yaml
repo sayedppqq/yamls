@@ -1,0 +1,24 @@
+apiVersion: core.kubestash.com/v1alpha1
+kind: RestoreSession
+metadata:
+  name: restore-pvc
+  namespace: demo
+spec:
+  dataSource:
+    repository: pvc-2
+    snapshot: latest
+  addon:
+    name: pvc-addon
+    tasks:
+      - name: volume-snapshot-restore
+        targetVolumes:
+          volumeClaimTemplates:
+            - metadata:
+                name: datadir-simple-2-configsvr-0
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: "longhorn"
+                resources:
+                  requests:
+                    storage: 5Gi     
+                

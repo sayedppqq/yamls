@@ -7,25 +7,25 @@ spec:
   storage:
     provider: s3
     s3:
-      endpoint: us-east-1.linodeobjects.com
+      endpoint: ap-south-1.linodeobjects.com
       bucket: abusayed
-      region: us-east-1
-      prefix: demo
-      secret: s3-secret
+      region: ap-south-1
+      prefix: mg-arch
+      secretName: s3-secret
   usagePolicy:
     allowedNamespaces:
       from: All
   deletionPolicy: WipeOut
-  runtimeSettings:
-    pod:
-      securityContext:
-        runAsUser: 999
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-    container:
-      securityContext:
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
+  # runtimeSettings:
+  #   pod:
+  #     securityContext:
+  #       runAsUser: 999
+  #       runAsNonRoot: true
+  #       seccompProfile:
+  #         type: RuntimeDefault
+  #   container:
+  #     securityContext:
+  #       allowPrivilegeEscalation: false
+  #       capabilities:
+  #         drop:
+  #           - ALL

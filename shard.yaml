@@ -1,8 +1,10 @@
 apiVersion: kubedb.com/v1alpha2
 kind: MongoDB
 metadata:
-  name: simple
+  name: simple-2
   namespace: demo
+  labels:
+    archiver: "true"  
 spec:
   version: "4.4.26"
   shardTopology:
@@ -12,17 +14,22 @@ spec:
         resources:
           requests:
             storage: 5Gi
-        storageClassName: longhorn
+        # storageClassName: longhorn
+        # storageClassName: "standard"             
+        storageClassName: "linode-block-storage"             
     mongos:
       replicas: 1
     shard:
       replicas: 2
-      shards: 1
+      shards: 2
       storage:
         resources:
           requests:
             storage: 5Gi
-        storageClassName: longhorn
+        # storageClassName: longhorn
+        # storageClassName: "standard"     
+        storageClassName: "linode-block-storage"                
+  # terminationPolicy: WipeOut
   # monitor:
   #   agent: prometheus.io/operator
   #   prometheus:

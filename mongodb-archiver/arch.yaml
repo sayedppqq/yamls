@@ -1,0 +1,39 @@
+apiVersion: archiver.kubedb.com/v1alpha1
+kind: MongoDBArchiver
+metadata:
+  name: mongodbarchiver-sample
+  namespace: demo
+spec:
+  pause: false
+  databases:
+    namespaces:
+      from: "Same"
+    selector:
+      matchLabels:
+        archiver: "true"
+  retentionPolicy:
+    name: rp
+    namespace: demo
+  encryptionSecret:
+    name: encry-secret
+    namespace: demo
+  # fullBackup:
+  #   driver: VolumeSnapshotter
+  #   task:
+  #     params:
+  #       volumeSnapshotClassName: longhorn-snapshot-vsc
+  #   scheduler:
+  #     successfulJobsHistoryLimit: 1
+  #     failedJobsHistoryLimit: 1
+  #     schedule: "*/6 * * * *"
+  #   sessionHistoryLimit: 2
+  # manifestBackup:
+  #   scheduler:
+  #     successfulJobsHistoryLimit: 1
+  #     failedJobsHistoryLimit: 1
+  #     schedule: "*/6 * * * *"
+  #   sessionHistoryLimit: 2
+  backupStorage:
+    ref:
+      name: s3-storage
+      namespace: demo
